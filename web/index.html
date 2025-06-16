@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Monitor de Placas</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Placas Detectadas</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Placa</th>
+                <th>Status</th>
+                <th>Data/Hora</th>
+            </tr>
+        </thead>
+        <tbody id="tabela-placas"></tbody>
+    </table>
+
+    <div style="text-align: center; margin-top: 20px;">
+        <button onclick="abrir()">Abrir Portão</button>
+        <button onclick="fechar()">Fechar Portão</button>
+    </div>
+
+    <script>
+        const ipESP32Servo = "http://192.168.x.x"; // Substitua pelo IP correto da ESP32 com o motor -> APARECE NO SERIAL MONITOR
+
+        async function abrir() {
+            try {
+                const response = await fetch(`${ipESP32Servo}/abrir`);
+                const texto = await response.text();
+                console.log("Resposta ao abrir:", texto);
+            } catch (error) {
+                console.error("Erro ao abrir portão:", error);
+            }
+        }
+
+        async function fechar() {
+            try {
+                const response = await fetch(`${ipESP32Servo}/fechar`);
+                const texto = await response.text();
+                console.log("Resposta ao fechar:", texto);
+            } catch (error) {
+                console.error("Erro ao fechar portão:", error);
+            }
+        }
+
+        async function atualizarTabela() {
+            try {
+                const response = await fetch('/placas');
+                const dados = await response.json();
+                const ultimas = dados.slice(-5).reverse();
+                const tabela = document.getElementById('tabela-placas');
+                tabela.innerHTML = '';
+
+                ultimas.forEach(dado => {
+                    const linha = document.createElement('tr');
+                    const classe = dado.status.toLowerCase() === "liberado" ? "liberado" : "negado";
+                    linha.innerHTML = `
+                        <td>${dado.placa}</td>
+                        <td class="${classe}">${dado.status}</td>
+                        <td>${dado.timestamp}</td>
+                    `;
+                    tabela.appendChild(linha);
+                });
+            } catch (err) {
+                console.error("Erro ao atualizar tabela:", err);
+            }
+        }
+
+        setInterval(atualizarTabela, 3000);
+        atualizarTabela();
+    </script>
+</body>
+</html>

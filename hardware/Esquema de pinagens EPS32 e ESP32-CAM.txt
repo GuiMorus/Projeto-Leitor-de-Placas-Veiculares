@@ -1,0 +1,13 @@
+Conexões e Pinagem do Hardware
+
+- ESP32 alimenta ESP32CAM pelos pinos Vin (5V) e GND (Terra).
+- RX2 (GPIO16) da ESP32 conectado ao pino TX (UOT) da ESP32CAM (comunicação Serial).
+- TX2 (GPIO17) da ESP32 conectado ao pino RX (UOR) da ESP32CAM (comunicação Serial).
+- Pino 21 (GPIO21) da ESP32 -> SDA do display LCD
+- Pino 22 (GPIO22) da ESP32 -> SCL do display LCD
+- Pino 18 (GPIO18) da ESP32 -> controle do Servo Motor
+- Velocidade da conexão: 115200 baud.
+
+> O Servo Motor e o Display LCD I2C devem ser alimentados por uma fonte externa de 5V independente da ESP32 e da ESP32CAM.
+
+OBS: minha equipe fez um adaptador com um cabo USB, cortamos o cabo, pegamos o fio vermelho (5V) e o fio preto (GND/Terra) e conectamos em vias separadas na protoboard.

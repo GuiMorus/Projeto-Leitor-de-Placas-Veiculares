@@ -1,0 +1,5 @@
+easyocr==1.7.1
+opencv-python==4.8.0.76
+requests==2.31.0
+torch==2.2.2
+ultralytics==8.1.22

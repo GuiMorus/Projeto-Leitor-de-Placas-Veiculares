@@ -67,12 +67,12 @@ Controla um **servo motor** conectado ao ESP32 para simular a liberação do ace
 <!-- Fotos e Gifs do projeto -->
 ![GIF do sistema capturando a placa](./docs/medias/Gif1.gif)
 ![GIF do sistema capturando outra placa](./docs/medias/Gif2.gif)
-![GIF da maquete e protótipo funcionando](./docs/medias/Gif3.gif)
 ![Mostrando placa a ser detectada](./docs/medias/Foto4.png)
 ![Mostrando a maquete completa](./docs/medias/Foto5.png)
 ![Veículo em frente a portaria](./docs/medias/Foto1.png)
 ![Mostrando frente do Display](./docs/medias/Foto2.png)
 ![Mostrando frente do Display](./docs/medias/Foto3.png)
+![GIF da maquete e protótipo funcionando](./docs/medias/Gif3.gif)
 ![Panfleto do projeto](./docs/medias/panfleto.png)
 
 ## 💻 STACK DE TECNOLOGIAS

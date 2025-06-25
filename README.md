@@ -193,8 +193,8 @@ Para que o sistema funcione corretamente:
 > - em **main.py** modifique o **IP da ESP32-CAM na linha 12**.
 > - em **main.py** modifique o **IP da ESP32 na linha 13**.
 > - em web > **index.html** modifique o **IP da ESP32 na linha 27**.
-> - em code > ESP32_LCD > **ESP32_LCD.ino** modifique o **SSID e Passeord da ESP32 na linha 7 e 8**.
-> - em code > ESPCAM_CameraWebServer > **ESPCAM_CameraWebServer.ino** modifique o **SSID e Passeord da ESP32 na linha 31 e 32**.
+> - em code > ESP32_LCD > **ESP32_LCD.ino** modifique o **SSID e Password da ESP32 na linha 7 e 8**.
+> - em code > ESPCAM_CameraWebServer > **ESPCAM_CameraWebServer.ino** modifique o **SSID e Password da ESP32-CAM na linha 31 e 32**.
 
 ---
 

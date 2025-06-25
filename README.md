@@ -1,7 +1,7 @@
 # Leitor de Placas Veiculares com IA
 Sistema de leitura automática de placas de veículos utilizando visão computacional e dispositivos IoT com ESP32 e ESP32-CAM.
 
-[🇺🇸 READ IN ENGLISH! 🇨🇦](README.md)
+[🇺🇸 READ IN ENGLISH! 🇨🇦](README.en.md)
 
 <!-- Bagdes informando visualmente as tecnologias utilizadas -->
 ![Python](https://img.shields.io/badge/Python-000?style=flat-square&labelColor=black&logo=Python&logoColor=white&color=blue)

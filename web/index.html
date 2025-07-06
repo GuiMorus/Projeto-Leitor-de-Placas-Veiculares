@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+    <!-- Metadados básicos da página -->
     <meta charset="UTF-8">
     <title>Monitor de Placas</title>
+    <!-- Link para a folha de estilos CSS externa -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <h1>Placas Detectadas</h1>
+    <!-- Tabela que exibirá os dados das placas -->
     <table>
         <thead>
             <tr>
@@ -18,44 +21,61 @@
         <tbody id="tabela-placas"></tbody>
     </table>
 
+    <!-- Div com os botões de controle manual do portão -->
     <div style="text-align: center; margin-top: 20px;">
         <button onclick="abrir()">Abrir Portão</button>
         <button onclick="fechar()">Fechar Portão</button>
     </div>
 
     <script>
-        const ipESP32Servo = "http://192.168.x.x"; // Substitua pelo IP correto da ESP32 com o motor -> APARECE NO SERIAL MONITOR
+        // Esta variável armazena o endereço IP do ESP32 que controla o servo motor.
+        // O script 'start.sh' substitui "http://192.168.x.x" pelo IP correto fornecido pelo usuário.
+        const ipESP32Servo = "http://192.168.1.11";
 
+        /**
+         * Função assíncrona para enviar o comando de abrir o portão para o ESP32.
+         */
         async function abrir() {
             try {
+                // Usa a API fetch para fazer uma requisição GET para o endpoint /abrir do ESP32.
                 const response = await fetch(`${ipESP32Servo}/abrir`);
-                const texto = await response.text();
-                console.log("Resposta ao abrir:", texto);
+                console.log("Comando 'abrir' enviado. Resposta:", await response.text());
             } catch (error) {
                 console.error("Erro ao abrir portão:", error);
             }
         }
 
+        /**
+         * Função assíncrona para enviar o comando de fechar o portão para o ESP32.
+         */
         async function fechar() {
             try {
+                // Usa a API fetch para fazer uma requisição GET para o endpoint /fechar do ESP32.
                 const response = await fetch(`${ipESP32Servo}/fechar`);
-                const texto = await response.text();
-                console.log("Resposta ao fechar:", texto);
+                console.log("Comando 'fechar' enviado. Resposta:", await response.text());
             } catch (error) {
                 console.error("Erro ao fechar portão:", error);
             }
         }
 
+        /**
+         * Função assíncrona para buscar os dados das placas na API e atualizar a tabela na página.
+         */
         async function atualizarTabela() {
             try {
+                // Busca os dados do endpoint /placas da nossa API Flask.
                 const response = await fetch('/placas');
                 const dados = await response.json();
+                // Pega apenas os últimos 5 registros e os inverte para mostrar o mais recente no topo.
                 const ultimas = dados.slice(-5).reverse();
                 const tabela = document.getElementById('tabela-placas');
+                // Limpa o conteúdo atual da tabela antes de adicionar as novas linhas.
                 tabela.innerHTML = '';
 
+                // Itera sobre cada registro de placa recebido.
                 ultimas.forEach(dado => {
                     const linha = document.createElement('tr');
+                    // Adiciona uma classe CSS ('liberado' ou 'negado') para estilizar a linha com base no status.
                     const classe = dado.status.toLowerCase() === "liberado" ? "liberado" : "negado";
                     linha.innerHTML = `
                         <td>${dado.placa}</td>
@@ -65,11 +85,15 @@
                     tabela.appendChild(linha);
                 });
             } catch (err) {
-                console.error("Erro ao atualizar tabela:", err);
+                console.error("Erro ao buscar ou atualizar dados da tabela:", err);
             }
         }
 
+        // Chama a função 'atualizarTabela' a cada 3000 milissegundos (3 segundos)
+        // para manter os dados da página sempre atualizados.
         setInterval(atualizarTabela, 3000);
+
+        // Chama a função uma vez no início para carregar os dados assim que a página for aberta.
         atualizarTabela();
     </script>
 </body>

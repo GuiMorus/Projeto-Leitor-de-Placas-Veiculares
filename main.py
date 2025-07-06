@@ -8,10 +8,11 @@ import easyocr
 import re
 import os
 
-# Configurações de IPs
-IP_CAM = "192.168.x.x"      # IP da ESP32-CAM -> APARECE NO SERIAL MONITOR
-IP_LCD = "192.168.x.x"      # IP do ESP32 com LCD -> APARECE NO SERIAL MONITOR
+# Configurações - Lidas a partir de variáveis de ambiente para uso com Docker
+IP_CAM = os.getenv("IP_CAM", "192.168.1.10")      # IP da ESP32-CAM
+IP_LCD = os.getenv("IP_LCD", "192.168.1.11")      # IP do ESP32 com LCD
 URL_LCD = f"http://{IP_LCD}/lcd"
+API_URL = os.getenv("API_URL", "http://localhost:5000")
 
 # Inicializações
 model = YOLO("license_plate_detector.pt")
@@ -29,9 +30,13 @@ if os.path.exists(path_detectadas):
 else:
     placas_detectadas = []
 
-# Carrega placas liberadas
-with open(path_liberadas, "r") as f:
-    placas_liberadas = json.load(f)
+# Carrega placas liberadas de forma segura
+try:
+    with open(path_liberadas, "r", encoding='utf-8') as f:
+        placas_liberadas = json.load(f)
+except (FileNotFoundError, json.JSONDecodeError):
+    print(f"[AVISO] Arquivo '{path_liberadas}' não encontrado ou inválido. Nenhuma placa será considerada liberada.")
+    placas_liberadas = []
 
 # Utilitários
 
@@ -114,7 +119,7 @@ while True:
                             "timestamp": now,
                             "status": status
                         }
-                        resposta = requests.post("http://localhost:5000/nova-placa", json=dados, timeout=20)
+                        resposta = requests.post(f"{API_URL}/nova-placa", json=dados, timeout=20)
                         if resposta.status_code == 200:
                             print("[✓] Placa enviada com sucesso para a página HTML.")
                         else:

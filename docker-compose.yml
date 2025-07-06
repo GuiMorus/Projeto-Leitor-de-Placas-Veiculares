@@ -1,0 +1,63 @@
+# A seção 'services' define os contêineres que compõem a aplicação.
+services:
+  # --- Serviço da API Web (Flask) ---
+  # Este serviço executa a API que serve a página HTML e os dados das placas.
+  api:
+    build:
+      # 'context: .' indica que o contexto de build é o diretório atual.
+      context: .
+      # Especifica o Dockerfile a ser usado para construir a imagem deste serviço.
+      dockerfile: api.Dockerfile
+    # Define um nome customizado para o contêiner para fácil identificação.
+    container_name: plate_api
+    ports:
+      # Mapeia a porta 5000 do contêiner para a porta 5000 da máquina host.
+      # Isso permite acessar a API de fora do contêiner via http://localhost:5000.
+      - "5000:5000"
+    volumes:
+      # Monta o arquivo local 'placas_detectadas.json' dentro do contêiner.
+      # Isso garante que os dados das placas detectadas sejam persistidos na máquina host.
+      - ./placas_detectadas.json:/app/placas_detectadas.json
+    # Define uma verificação de saúde para o contêiner.
+    healthcheck:
+      # O comando a ser executado para verificar se o serviço está saudável.
+      test: ["CMD", "curl", "-f", "http://localhost:5000/placas"]
+      # Intervalo entre as verificações.
+      interval: 10s
+      # Tempo máximo para a verificação ser concluída.
+      timeout: 5s
+      # Número de tentativas antes de marcar o contêiner como 'unhealthy'.
+      retries: 5
+      # Período de carência no início para o serviço ter tempo de inicializar.
+      start_period: 10s
+
+  # --- Serviço de Detecção de Placas (Python/OpenCV/YOLO) ---
+  # Este serviço executa o script principal 'main.py'.
+  detector:
+    build:
+      context: .
+      dockerfile: main.Dockerfile
+    container_name: plate_detector
+    # 'network_mode: "host"' faz o contêiner compartilhar a interface de rede da máquina host.
+    # Isso é crucial para que o contêiner possa acessar os ESPs na rede local (ex: 192.168.1.10)
+    # e também o serviço 'api' via 'localhost:5000'.
+    network_mode: "host"
+    volumes:
+      # Monta os arquivos necessários para o script de detecção.
+      - ./placas_detectadas.json:/app/placas_detectadas.json
+      # ':ro' (read-only) garante que o contêiner não possa modificar esses arquivos.
+      - ./placas_liberadas.json:/app/placas_liberadas.json:ro
+      - ./license_plate_detector.pt:/app/license_plate_detector.pt:ro
+    # Passa variáveis de ambiente para dentro do contêiner.
+    # O script 'main.py' usará essas variáveis para se conectar aos ESPs e à API.
+    # Os valores ${IP_CAM} e ${IP_LCD} são lidos pelo Docker Compose do ambiente do shell
+    # onde o comando 'docker-compose up' é executado (definidos pelo start.sh).
+    environment:
+      - IP_CAM=${IP_CAM}
+      - IP_LCD=${IP_LCD}
+      - API_URL=http://localhost:5000
+    # Garante que o serviço 'detector' só inicie DEPOIS que o serviço 'api'
+    # for considerado saudável (passar no healthcheck).
+    depends_on:
+      api:
+        condition: service_healthy

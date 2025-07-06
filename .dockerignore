@@ -1,0 +1,12 @@
+# Ignorar arquivos de configuração do Docker e Git
+Dockerfile
+*.Dockerfile
+docker-compose.yml
+.git
+.gitignore
+.env
+
+# Ignorar arquivos de cache e backup
+__pycache__/
+*.pyc
+*.bak

@@ -3,3 +3,5 @@ opencv-python==4.8.0.76
 requests==2.31.0
 torch==2.2.2
 ultralytics==8.1.22
+flask==3.0.3
+numpy==1.23.5

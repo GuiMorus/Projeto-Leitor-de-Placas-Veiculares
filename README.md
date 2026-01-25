@@ -366,7 +366,7 @@ Depois de muito trabalho, pesquisas sobre sistemas semelhantes e conversas com a
 
 Apresento os membros do **Grupo 9 - Turma B da UNIFEOB 2025** que fez este projeto ser uma realidade.
 
-![Foto da turma](Turma_Projeto_UNIFEOB.jpg)
+![Foto da turma](./docs/medias/Turma_Projeto_UNIFEOB.jpg)
 
 ### Guilherme Moreira (eu)
 - Responsável pela programação em Python.

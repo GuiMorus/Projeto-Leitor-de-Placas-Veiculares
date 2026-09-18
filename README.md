@@ -89,7 +89,7 @@ Biblioteca de visão computacional usada para **ler o vídeo em tempo real da ES
 Modelo de IA responsável por **detectar e localizar as placas veiculares** na imagem. Sem o YOLO, o sistema não conseguiria distinguir a placa do restante do cenário. Utiliza um modelo pré-treinado chamado ```license_plate_detector.pt```, adaptado para reconhecer diversos padrões de placas ao redor do mundo.
 
 ### 🆎 easyOCR <sub>IA</sub>
-Após a detecção da placa, o EasyOCR realiza a **leitura óptica dos caracteres**, convertendo a imagem em texto. Ele permite extrair a numeração da placa para realizar a verificação no banco de dados — no nosso caso no JSON.
+Após a detecção da placa, o EasyOCR realiza a **leitura óptica dos caracteres**, convertendo a imagem em texto. Ele permite extrair a numeração da placa para realizar a verificação no banco de dados — no nosso caso no arquivo `placas_liberadas.json`.
 Está configurado para reconhecer **os padrões de placas brasileiras**, tanto o modelo antigo quanto o novo padrão MERCOSUL.
 
 ### 🌐 Flask
